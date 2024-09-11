@@ -79,6 +79,12 @@ class Money_Receipt:
             self.set_cell_text(table.cell(i + 1, 1), payment_mode, alignment=WD_ALIGN_PARAGRAPH.RIGHT)
             self.set_cell_text(table.cell(i + 1, 2), amount, alignment=WD_ALIGN_PARAGRAPH.RIGHT)
 
+        merge_cell = table.cell(1,1).merge(table.cell(2,1)).merge(table.cell(3,1))
+        merge_cell.text = ""
+        merge_cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+        merge_cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        self.add_picture_to_cell(merge_cell, "assets/PAID.png", 1)
+
         self.doc.add_paragraph("\n\n\n")
         in_words = f"In Words: {num2words(int(self.data_arr[4]) + int(self.data_arr[5])).upper()} CAD only"
         self.doc.add_paragraph(in_words).bold = True
