@@ -37,6 +37,7 @@ class Application:
         # SecondScreen.Second(self.mainFrame,self.current_dir)
         self.window.mainloop()
 
+    # making the header part with logo , refresh and customization button
     def header(self):
         self.header_body = CTkFrame(self.window, width=850, height=50, fg_color=self.bgcolor, corner_radius=0)
         # Use path.join to construct paths
@@ -46,6 +47,7 @@ class Application:
         
         CTkLabel(self.header_body, text="", image=img).pack(side="left")
 
+        # customization part
         settings_path = path.join(self.current_dir, 'assets', 'settings.png')
         simg = Image.open(settings_path)
         simg = CTkImage(simg, size=(30,30))
@@ -54,6 +56,7 @@ class Application:
         setting.pack(padx=(0,30), side="right")
         setting.bind("<Button-1>", self.customization_command)
 
+        # reload part
         reset_path = path.join(self.current_dir, 'assets', 'reload.png')
         rimg = Image.open(reset_path)
         rimg = CTkImage(rimg, size=(30,30))
@@ -64,16 +67,19 @@ class Application:
 
         self.header_body.pack(padx=10, pady=10, ipadx=850)
 
+    # reload command
     def reset_command(self, event) :
         self.window.destroy()
         Application()
     
+    # customization command
     def customization_command(self, event) :
         top = CTkToplevel(self.window)
         top.geometry(f"{self.width}x{self.height}+{self.gapx}+{self.gapy}")
         # top.wm_attributes("-topmost", 1)
         Customize.Customization(top, self.current_dir)
     
+    # DocFile and necessary files in there if not exist will create automatically
     def folder_existance(self) :
         docfile = path.join(self.current_dir, 'DocFile')
         if not path.exists(docfile) :
@@ -99,4 +105,6 @@ class Application:
         if not path.exists(sheet) :
             makedirs(sheet)
 
-Application()
+# calling the main App
+if __name__ == "__main__" :
+    Application()
