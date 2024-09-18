@@ -1,7 +1,7 @@
 from customtkinter import *
 from tkinter import messagebox
 from numpy import random
-from Helper.Excel_control import Excel_Book
+from Helper.Supabase import Excel_Book
 
 class Second:
     def __init__(self, window, current_path):
@@ -29,8 +29,7 @@ class Second:
             return False
     
     def fetch_client(self):
-        self.excel = Excel_Book(self.current_path)
-        self.excel.exist()
+        self.excel = Excel_Book()        
         return self.excel.select_info()
 
     def client_part(self) :
@@ -109,16 +108,33 @@ class Second:
 
         CTkButton(self.mainFrame, text="First page", command=self.firstScreen).pack(pady=10, fill="x")
     
-    def serial_no(self):
-        return random.randint(100000, 999999)
+    def check_exist(self, arr, rand) :
+        if rand in arr :
+            return True
+        else :
+            return False        
+
+    def serial_no(self, type):
+        r = random.randint(100000, 999999)        
+        if type == "invoice" :
+            if self.check_exist(self.excel.select_invoice(), r) :
+                return self.serial_no("invoice")
+            else :
+                return r
+        
+        elif type == "receipt" :
+            if self.check_exist(self.excel.select_receipt(), r) :
+                return self.serial_no("receipt")
+            else :
+                return r
 
     def create_invoice(self):
-        self.arr = [self.serial_no(), self.client.get(), self.professional.get(), self.govt.get(), self.consultation.get(), self.application.get(), self.payment.get()]
+        self.arr = [self.serial_no("invoice"), self.client.get(), self.professional.get(), self.govt.get(), self.consultation.get(), self.application.get(), self.payment.get()]
         try:
             from Helper.Invoice import Invoice
-            self.excel = Excel_Book(self.current_path)
-            self.excel.update_info(self.arr[1], self.arr[0])
-            self.excel.save()
+            from datetime import datetime
+            arr = [self.arr[0], self.arr[1], self.arr[2], self.arr[3], datetime.today()]
+            self.excel.add_invoice(arr)
             self.invoiceclass = Invoice(self.arr)
             messagebox.showinfo("Information", f"Invoice docx for client file no: {self.arr[1]} is done and file no: {self.arr[0]}.")
             self.invoicepdf.configure(state = "normal")
@@ -135,12 +151,12 @@ class Second:
             print(e)
 
     def create_receipt(self):
-        self.arr = [self.serial_no(), self.client.get(), self.professional.get(), self.govt.get(), self.consultation.get(), self.application.get(), self.payment.get()]
+        self.arr = [self.serial_no("receipt"), self.client.get(), self.professional.get(), self.govt.get(), self.consultation.get(), self.application.get(), self.payment.get()]
         try:
             from Helper.Money_Recipt import Money_Receipt
-            self.excel = Excel_Book(self.current_path)
-            self.excel.update_info(self.arr[1], self.arr[0])
-            self.excel.save()
+            from datetime import datetime
+            arr = [self.arr[0], self.arr[1], self.arr[4], self.arr[5], self.arr[6], datetime.today()]
+            self.excel.add_receipt(arr)
             self.receiptclass = Money_Receipt(self.arr)
             messagebox.showinfo("Information", f"Money Receipt docx for client file no: {self.arr[1]} is done and file no: {self.arr[0]}.")
             self.receiptpdf.configure(state="normal")

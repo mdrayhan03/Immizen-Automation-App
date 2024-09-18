@@ -365,17 +365,16 @@ class First:
 
         self.clientResponsibilities_data()
         self.client_number = self.client_file_number()
-        self.excel_arr = [self.client_number,self.name.get(),self.fname.get(),self.nationality.get(),self.dob.  get_date().strftime("%d/%m/%Y"),self.pN.get(),self.email.get(),self.passNo.get(),self.address.get(),self.type.get(),self.professional,self.adminstrative.get()]
+        self.excel_arr = [self.client_number,self.name.get(),self.fname.get(),self.nationality.get(),self.dob.  get_date().strftime("%d/%m/%Y"),self.pN.get(),self.email.get(),self.passNo.get(),self.address.get(),self.type.get(),self.professional,self.adminstrative.get(),datetime.today()]
 
         if self.refer.get() == True :
             self.service_agreement_arr = [self.client_number,self.name.get(),self.fname.get(),self.nationality.get(),   self.dob.get_date().strftime("%d/%m/%Y"),self.pN.get(),self.email.get(),self.passNo.get(),self.address.get(),self.type.get(),self.professional,self.adminstrative.get(),self.responsibilities_arr,arr,self.refer.get(),self.refername.get(),self.referemail.get(),self.referdob.get_date().strftime("%d/%m/%Y"),self.referaddress.get()]
         else :
             self.service_agreement_arr = [self.client_number,self.name.get(),self.fname.get(),self.nationality.get(),   self.dob.get_date().strftime("%d/%m/%Y"),self.pN.get(),self.email.get(),self.passNo.get(),self.address.get(),self.type.get(),   self.professional,self.adminstrative.get(),self.responsibilities_arr,arr,self.refer.get()]
         try :
-            from Helper.Excel_control import Excel_Book
-            self.excel = Excel_Book(self.current_path)
-            self.excel.add_info(self.excel_arr)
-            self.excel.save()
+            from Helper.Supabase import Excel_Book
+            self.excel = Excel_Book()
+            self.excel.add_info(self.excel_arr)            
             from Helper.Service_Agreement import Service_Agreement
             self.serviceclass = Service_Agreement(self.service_agreement_arr)            
             messagebox.showinfo("Information", f"Your input entered in Excel Sheet, Service Agreement docx document created.\nFile name {self.client_number}.")
