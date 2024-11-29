@@ -4,6 +4,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ALIGN_VERTICAL
 from datetime import datetime
 from num2words import num2words
+import os
 
 class Invoice:
     def __init__(self, arr, current_path):
@@ -11,6 +12,13 @@ class Invoice:
         self.set_default_font('Calibri')
         self.set_margin(1)
         self.data_arr = arr
+
+        self.path = ""
+        if os.path.exists("path_file.txt") :
+            f = open("path_file.txt", "rt")
+            p = f.readline()
+            self.path = p
+
         self.current_path = current_path
         self.logo()
         self.header()
@@ -97,7 +105,7 @@ class Invoice:
         ).italic = True
 
     def save(self):
-        self.doc.save(f"DocFile/Invoice/{self.data_arr[0]}_{self.data_arr[1]}.docx")
+        self.doc.save(f"{self.path}/DocFile/Invoice/{self.data_arr[0]}_{self.data_arr[1]}.docx")
 
     def save_pdf(self) :
         import sys
@@ -107,7 +115,7 @@ class Invoice:
         logging.basicConfig(filename="app_error.log", level=logging.DEBUG)
         try:
             from docx2pdf import convert
-            convert(f"DocFile/Invoice/{self.data_arr[0]}_{self.data_arr[1]}.docx")
+            convert(f"{self.path}/DocFile/Invoice/{self.data_arr[0]}_{self.data_arr[1]}.docx")
         except Exception as e:
             logging.exception("An error occurred")
         

@@ -11,6 +11,13 @@ class Initial_Consultation :
         self.set_default_font('Calibri')
         self.set_margin(1)
         self.data_arr = arr
+        
+        self.path = ""
+        if os.path.exists("path_file.txt") :
+            f = open("path_file.txt", "rt")
+            p = f.readline()
+            self.path = p
+
         self.current_dir = current_dir
         self.logo()
         self.head = self.doc.add_heading("INITIAL CONSULTATION AGREEMENT")
@@ -101,7 +108,7 @@ class Initial_Consultation :
         self.run.font.size = Pt(9)
 
     def save(self) :
-        self.doc.save(f"DocFile/Initial Consultation Agreement/{self.data_arr[0]}.docx")
+        self.doc.save(f"{self.path}/DocFile/Initial Consultation Agreement/{self.data_arr[0]}.docx")
     
     def save_pdf(self) :
         import sys
@@ -111,7 +118,7 @@ class Initial_Consultation :
         logging.basicConfig(filename="app_error.log", level=logging.DEBUG)
         try:
             from docx2pdf import convert
-            convert(f"DocFile/Initial Consultation Agreement/{self.data_arr[0]}.docx")
+            convert(f"{self.path}/DocFile/Initial Consultation Agreement/{self.data_arr[0]}.docx")
         except Exception as e:
             logging.exception("An error occurred")
         

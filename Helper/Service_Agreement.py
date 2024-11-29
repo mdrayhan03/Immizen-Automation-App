@@ -3,6 +3,7 @@ from docx.shared import Inches, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ALIGN_VERTICAL
 from datetime import datetime
+import os
 
 class Service_Agreement :
     def __init__(self, arr, current_path) :
@@ -10,6 +11,13 @@ class Service_Agreement :
         self.set_default_font('Calibri')
         self.set_margin(1)
         self.data_arr = arr
+
+        self.path = ""
+        if os.path.exists("path_file.txt") :
+            f = open("path_file.txt", "rt")
+            p = f.readline()
+            self.path = p
+
         self.current_path = current_path
         self.logo()
         self.head = self.doc.add_heading("SERVICE AGREEMENT")
@@ -245,7 +253,7 @@ class Service_Agreement :
         self.paragraph.add_run(f"Address: {self.data_arr[18]}")
         
     def save(self) :
-        self.doc.save(f"DocFile/Service Agreement/{self.data_arr[0]}.docx")
+        self.doc.save(f"{self.path}/DocFile/Service Agreement/{self.data_arr[0]}.docx")
 
     def save_pdf(self) :
         import sys
@@ -255,7 +263,7 @@ class Service_Agreement :
         logging.basicConfig(filename="app_error.log", level=logging.DEBUG)
         try:
             from docx2pdf import convert
-            convert(f"DocFile/Service Agreement/{self.data_arr[0]}.docx")
+            convert(f"{self.path}/DocFile/Service Agreement/{self.data_arr[0]}.docx")
         except Exception as e:
             logging.exception("An error occurred")
         
