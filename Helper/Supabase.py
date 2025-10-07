@@ -1,10 +1,14 @@
 from supabase import create_client, Client
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 class Excel_Book :
     def __init__(self) -> None:
-        url = "https://jwyeljttuypuwqpcguib.supabase.co"
-        key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3eWVsanR0dXlwdXdxcGNndWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3NDg1NDMsImV4cCI6MjA0MjMyNDU0M30.W4McGtOiT0CRuzdQXd16xfp1PRA0uceNvhQSNfSUVY8"
+        url = os.getenv("API_URL")
+        key = os.getenv("API_KEY")
 
         self.base : Client = create_client(url, key)
         # self.base.auth.sign_in_anonymously()
